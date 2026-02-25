@@ -5,10 +5,3 @@ coverage/
 *.log
 .env*
 !.env.example
-
-# Local Tools
-printcode.sh
-gitr.sh
-gitrdif.sh
-gitrdiff.md
-dump*.md

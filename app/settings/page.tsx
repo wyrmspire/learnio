@@ -1,132 +1,204 @@
 "use client";
 
-import { Database, FileCode2, Settings2, ShieldCheck, UploadCloud, Users } from "lucide-react";
+import { useState } from "react";
+import { 
+  Loader2, 
+  CheckCircle2, 
+  AlertCircle, 
+  FileText, 
+  Play, 
+  Save, 
+  RefreshCw,
+  Search,
+  Database
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { LessonSpec } from "@/lib/contracts/lesson";
+import { mockRustLesson } from "@/lib/data/mock-lessons";
+
+// Mock "Compiler" function
+const compileLesson = async (topic: string): Promise<LessonSpec> => {
+  await new Promise(resolve => setTimeout(resolve, 2000)); // Fake delay
+  
+  // In a real app, this would call an API.
+  // For now, we return a slightly modified version of the mock lesson
+  return {
+    ...mockRustLesson,
+    id: `lesson-${Date.now()}`,
+    title: `Mastering ${topic}`,
+    topic: topic,
+    description: `A comprehensive guide to ${topic} with interactive exercises.`,
+    provenance: {
+      generatorModel: "mock-llm-v1",
+      promptBundleVersion: "v1.0.0",
+    }
+  };
+};
 
 export default function SettingsPage() {
+  const [topic, setTopic] = useState("");
+  const [status, setStatus] = useState<"idle" | "generating" | "review" | "published">("idle");
+  const [generatedLesson, setGeneratedLesson] = useState<LessonSpec | null>(null);
+  const [logs, setLogs] = useState<string[]>([]);
+
+  const addLog = (msg: string) => setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
+
+  const handleGenerate = async () => {
+    if (!topic.trim()) return;
+    
+    setStatus("generating");
+    setLogs([]);
+    addLog(`Starting compilation for topic: "${topic}"...`);
+    
+    try {
+      // Simulate pipeline stages
+      await new Promise(r => setTimeout(r, 800));
+      addLog("Step 1: Research Brief (Mocking Perplexity)...");
+      addLog("Found 5 key sources. Identifying misconceptions...");
+      
+      await new Promise(r => setTimeout(r, 800));
+      addLog("Step 2: Generating Lesson Skeleton...");
+      addLog("PDCA structure defined. 4 stages, 8 blocks.");
+      
+      await new Promise(r => setTimeout(r, 800));
+      addLog("Step 3: Authoring Blocks & Exercises...");
+      
+      const lesson = await compileLesson(topic);
+      setGeneratedLesson(lesson);
+      
+      addLog("Step 4: Validating Schema...");
+      addLog("Validation Passed. Ready for review.");
+      setStatus("review");
+    } catch (e) {
+      addLog("Error: Compilation failed.");
+      setStatus("idle");
+    }
+  };
+
+  const handlePublish = () => {
+    if (!generatedLesson) return;
+    addLog(`Publishing lesson "${generatedLesson.title}" to store...`);
+    // In a real app, we'd save to DB here
+    setStatus("published");
+    addLog("Lesson published successfully! Available in Learn runner.");
+  };
+
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
-      <div className="flex items-end justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-stone-900">Admin & Authoring</h1>
-          <p className="text-stone-500 mt-2">Manage curriculum, ingestion pipelines, and platform settings.</p>
-        </div>
+    <div className="max-w-5xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-stone-900">Ingestion Console</h1>
+        <p className="text-stone-500 text-sm">Generate, validate, and publish new lessons.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Curriculum Builder */}
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-stone-900 flex items-center gap-2">
-            <FileCode2 className="w-5 h-5 text-stone-400" />
-            Curriculum Builder
-          </h2>
-          <div className="bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm">
-            <div className="p-4 border-b border-stone-100 hover:bg-stone-50 cursor-pointer transition-colors flex items-center justify-between">
-              <div>
-                <h3 className="font-medium text-stone-900">Capability Management</h3>
-                <p className="text-sm text-stone-500">Create and edit Capability Units (CUs).</p>
-              </div>
-              <span className="text-stone-400">&rarr;</span>
-            </div>
-            <div className="p-4 border-b border-stone-100 hover:bg-stone-50 cursor-pointer transition-colors flex items-center justify-between">
-              <div>
-                <h3 className="font-medium text-stone-900">Exercise Bank</h3>
-                <p className="text-sm text-stone-500">Manage interactive exercises and rubrics.</p>
-              </div>
-              <span className="text-stone-400">&rarr;</span>
-            </div>
-            <div className="p-4 border-b border-stone-100 hover:bg-stone-50 cursor-pointer transition-colors flex items-center justify-between">
-              <div>
-                <h3 className="font-medium text-stone-900">Test Bank</h3>
-                <p className="text-sm text-stone-500">Configure process and transfer tests.</p>
-              </div>
-              <span className="text-stone-400">&rarr;</span>
-            </div>
-            <div className="p-4 hover:bg-stone-50 cursor-pointer transition-colors flex items-center justify-between">
-              <div>
-                <h3 className="font-medium text-stone-900">Citation Manager</h3>
-                <p className="text-sm text-stone-500">Link external references and assets.</p>
-              </div>
-              <span className="text-stone-400">&rarr;</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Ingestion Console */}
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-stone-900 flex items-center gap-2">
-            <UploadCloud className="w-5 h-5 text-stone-400" />
-            Ingestion Pipeline
-          </h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left: Controls */}
+        <div className="lg:col-span-1 space-y-6">
           <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
+            <h2 className="font-medium text-stone-900 mb-4 flex items-center gap-2">
+              <RefreshCw className="w-4 h-4 text-blue-500" />
+              Content Factory
+            </h2>
+            
             <div className="space-y-4">
-              <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-medium text-stone-900 flex items-center gap-2">
-                    <Database className="w-4 h-4 text-blue-500" />
-                    Run Research (Perplexity)
-                  </h3>
-                  <span className="text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Ready</span>
-                </div>
-                <p className="text-sm text-stone-600 mb-3">Generate raw briefs for new capabilities.</p>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Topic..." className="flex-1 border border-stone-300 rounded-md px-3 py-1.5 text-sm outline-none focus:border-blue-500" />
-                  <button className="bg-stone-900 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-stone-800 transition-colors">Run</button>
-                </div>
+              <div>
+                <label className="block text-xs font-medium text-stone-500 uppercase tracking-wider mb-1">Topic</label>
+                <input 
+                  type="text" 
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  placeholder="e.g. React useEffect"
+                  className="w-full border border-stone-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-stone-900 outline-none"
+                  disabled={status === "generating"}
+                />
               </div>
-
-              <div className="flex items-center gap-4 text-sm text-stone-600">
-                <div className="flex-1 h-px bg-stone-200"></div>
-                <span>Pipeline Stages</span>
-                <div className="flex-1 h-px bg-stone-200"></div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between p-3 border border-stone-200 rounded-lg bg-white">
-                  <span className="text-sm font-medium text-stone-700">1. Compile to DSL</span>
-                  <button className="text-xs font-medium text-stone-500 hover:text-stone-900">Execute</button>
-                </div>
-                <div className="flex items-center justify-between p-3 border border-stone-200 rounded-lg bg-white">
-                  <span className="text-sm font-medium text-stone-700 flex items-center gap-2">
-                    2. Validation Gate
-                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                  </span>
-                  <button className="text-xs font-medium text-stone-500 hover:text-stone-900">View Results</button>
-                </div>
-                <div className="flex items-center justify-between p-3 border border-stone-200 rounded-lg bg-white">
-                  <span className="text-sm font-medium text-stone-700">3. Publish to Production</span>
-                  <button className="text-xs font-medium bg-emerald-50 text-emerald-700 px-2 py-1 rounded hover:bg-emerald-100">Publish</button>
-                </div>
-              </div>
+              
+              <button 
+                onClick={handleGenerate}
+                disabled={!topic.trim() || status === "generating"}
+                className="w-full bg-stone-900 text-white py-2 rounded-lg text-sm font-medium hover:bg-stone-800 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {status === "generating" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                Generate Lesson
+              </button>
             </div>
+          </div>
+
+          {/* Logs Console */}
+          <div className="bg-stone-900 rounded-xl p-4 text-xs font-mono text-stone-400 h-64 overflow-y-auto border border-stone-800">
+            <div className="text-stone-500 mb-2 uppercase tracking-wider font-bold">System Logs</div>
+            {logs.length === 0 && <span className="opacity-50">Waiting for jobs...</span>}
+            {logs.map((log, i) => (
+              <div key={i} className="mb-1">{log}</div>
+            ))}
+            {status === "generating" && (
+              <div className="animate-pulse">_</div>
+            )}
           </div>
         </div>
 
-        {/* Platform Settings */}
-        <div className="space-y-6 md:col-span-2">
-          <h2 className="text-xl font-semibold text-stone-900 flex items-center gap-2">
-            <Settings2 className="w-5 h-5 text-stone-400" />
-            Platform Configuration
-          </h2>
-          <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm flex flex-col sm:flex-row gap-6">
-             <div className="flex-1 border border-stone-200 rounded-lg p-4 flex items-start gap-4 hover:border-stone-300 transition-colors cursor-pointer">
-                <div className="w-10 h-10 bg-stone-100 rounded-lg flex items-center justify-center shrink-0">
-                  <Users className="w-5 h-5 text-stone-600" />
+        {/* Right: Preview */}
+        <div className="lg:col-span-2">
+          {status === "idle" || status === "generating" ? (
+            <div className="h-full min-h-[400px] border-2 border-dashed border-stone-200 rounded-xl flex flex-col items-center justify-center text-stone-400">
+              <Database className="w-12 h-12 mb-4 opacity-20" />
+              <p>Generated content will appear here</p>
+            </div>
+          ) : (
+            <div className="bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm animate-in fade-in slide-in-from-bottom-4">
+              <div className="border-b border-stone-100 bg-stone-50 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-stone-500" />
+                  <span className="font-medium text-stone-900">Lesson Preview</span>
+                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full font-medium">Validated</span>
                 </div>
-                <div>
-                  <h3 className="font-medium text-stone-900 mb-1">Multi-tenant Organizations</h3>
-                  <p className="text-sm text-stone-500">Manage company workspaces, SSO, and roles.</p>
+                <div className="flex gap-2">
+                  {status === "review" && (
+                    <button 
+                      onClick={handlePublish}
+                      className="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-emerald-700 flex items-center gap-1"
+                    >
+                      <Save className="w-3.5 h-3.5" />
+                      Publish
+                    </button>
+                  )}
+                  {status === "published" && (
+                    <button className="bg-stone-100 text-stone-600 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 cursor-default">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                      Published
+                    </button>
+                  )}
                 </div>
-             </div>
-             <div className="flex-1 border border-stone-200 rounded-lg p-4 flex items-start gap-4 hover:border-stone-300 transition-colors cursor-pointer">
-                <div className="w-10 h-10 bg-stone-100 rounded-lg flex items-center justify-center shrink-0">
-                  <Database className="w-5 h-5 text-stone-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-stone-900 mb-1">Database Connections</h3>
-                  <p className="text-sm text-stone-500">Configure Postgres and Redis endpoints.</p>
-                </div>
-             </div>
-          </div>
+              </div>
+              
+              <div className="p-6 space-y-6 max-h-[600px] overflow-y-auto">
+                {generatedLesson && (
+                  <>
+                    <div>
+                      <h1 className="text-2xl font-bold text-stone-900">{generatedLesson.title}</h1>
+                      <p className="text-stone-600 mt-2">{generatedLesson.description}</p>
+                      <div className="flex gap-2 mt-4">
+                        {generatedLesson.tags?.map(tag => (
+                          <span key={tag} className="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">#{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-stone-900 border-b pb-2">Plan Stage</h3>
+                      <div className="pl-4 border-l-2 border-stone-200 space-y-2">
+                        {generatedLesson.stages.plan.blocks.map(b => (
+                          <div key={b.id} className="text-sm text-stone-600 bg-stone-50 p-2 rounded border border-stone-100">
+                            <span className="font-mono text-xs text-stone-400 uppercase mr-2">{b.type}</span>
+                            {(b as any).markdown?.substring(0, 50) || (b as any).prompt?.substring(0, 50)}...
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

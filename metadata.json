@@ -1,0 +1,5 @@
+{
+  "name": "Capability Dashboard",
+  "description": "A calm capability dashboard to run Capability Units (CUs) following PDCA, with adaptive exercises and a progress feed.",
+  "requestFramePermissions": []
+}

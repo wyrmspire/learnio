@@ -1,8 +1,17 @@
 import { useState, useEffect } from "react";
 import { dataClient } from "../data";
 import { Capability, CapabilityUnit, ProgressEvent, Recommendation, Attempt } from "../contracts/schemas";
+import { DomainEvent } from "../events/types";
+import { eventStore } from "../events/store";
 
-// Simple SWR-like hooks for the sandbox
+// ... (keep existing hooks)
+
+export function useEmitEvent() {
+  const emit = (event: DomainEvent) => {
+    eventStore.appendEvent(event);
+  };
+  return { emit };
+}
 export function useCapabilities() {
   const [data, setData] = useState<Capability[]>([]);
   const [loading, setLoading] = useState(true);

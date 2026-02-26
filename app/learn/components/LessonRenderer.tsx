@@ -16,6 +16,7 @@ import { CheckCircle2, AlertCircle, ChevronDown, ChevronRight, Lightbulb } from 
 
 interface BlockProps<T extends LessonBlock> {
   block: T;
+  index?: number;
   onInteract?: (interaction: any) => void;
 }
 
@@ -257,16 +258,16 @@ function TodoRenderer({ block }: BlockProps<TodoBlock>) {
 
 // --- Main Renderer ---
 
-export function LessonBlockRenderer({ block, onInteract }: BlockProps<LessonBlock>) {
+export function LessonBlockRenderer({ block, index, onInteract }: BlockProps<LessonBlock>) {
   switch (block.type) {
-    case "explainer": return <ExplainerRenderer block={block} onInteract={onInteract} />;
-    case "diagram": return <DiagramRenderer block={block} onInteract={onInteract} />;
-    case "scenario": return <ScenarioRenderer block={block} onInteract={onInteract} />;
-    case "prediction": return <PredictionRenderer block={block} onInteract={onInteract} />;
-    case "exercise": return <ExerciseRenderer block={block} onInteract={onInteract} />;
-    case "quiz": return <QuizRenderer block={block} onInteract={onInteract} />;
-    case "reflection": return <ReflectionRenderer block={block} onInteract={onInteract} />;
-    case "todo": return <TodoRenderer block={block} onInteract={onInteract} />;
+    case "explainer": return <ExplainerRenderer block={block} index={index} onInteract={onInteract} />;
+    case "diagram": return <DiagramRenderer block={block} index={index} onInteract={onInteract} />;
+    case "scenario": return <ScenarioRenderer block={block} index={index} onInteract={onInteract} />;
+    case "prediction": return <PredictionRenderer block={block} index={index} onInteract={onInteract} />;
+    case "exercise": return <ExerciseRenderer block={block} index={index} onInteract={onInteract} />;
+    case "quiz": return <QuizRenderer block={block} index={index} onInteract={onInteract} />;
+    case "reflection": return <ReflectionRenderer block={block} index={index} onInteract={onInteract} />;
+    case "todo": return <TodoRenderer block={block} index={index} onInteract={onInteract} />;
     default: return <div className="text-rose-500 text-xs">Unknown block type: {(block as any).type}</div>;
   }
 }

@@ -16,4 +16,8 @@ export type PDCAAction =
   | { type: "COMPLETE_CHECK" }
   | { type: "UPDATE_REFLECTION"; payload: string }
   | { type: "CLOSE_LOOP" }
-  | { type: "JUMP_TO_STAGE"; payload: Stage };
+  | { type: "JUMP_TO_STAGE"; payload: Stage }
+  // New Events
+  | { type: "BLOCK_INTERACTED"; payload: { blockId: string; interaction: any } }
+  | { type: "HINT_REVEALED"; payload: { blockId: string; hintIndex: number } }
+  | { type: "LESSON_COMPLETED"; payload: { skillId?: string; courseId?: string; lessonId: string } };

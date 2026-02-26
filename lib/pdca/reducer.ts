@@ -79,6 +79,13 @@ export function pdcaReducer(state: PDCAState, action: PDCAAction): PDCAState {
         currentStage: action.payload,
       };
 
+    // New Events: These don't change the PDCA state machine directly,
+    // but are allowed to flow through for side effects (logging/analytics)
+    case "BLOCK_INTERACTED":
+    case "HINT_REVEALED":
+    case "LESSON_COMPLETED":
+      return state;
+
     default:
       return state;
   }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useReducer } from "react";
+import { useReducer, useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { 
   CheckCircle2, 
@@ -16,16 +17,75 @@ import {
 } from "lucide-react";
 import { pdcaReducer, initialPDCAState } from "@/lib/pdca/reducer";
 import { Stage } from "@/lib/pdca/types";
-import { useSubmitAttempt } from "@/lib/hooks/use-data";
+import { useSubmitAttempt, useEmitEvent } from "@/lib/hooks/use-data";
 import { mockRustLesson } from "@/lib/data/mock-lessons";
 import { LessonBlockRenderer } from "./components/LessonRenderer";
+import { lessonStore } from "@/lib/data/lesson-store";
+import { LessonSpec } from "@/lib/contracts/lesson";
 
-export default function LearnSessionPage() {
+function LearnSession() {
+  const searchParams = useSearchParams();
+  const lessonId = searchParams.get("lessonId");
+  const versionId = searchParams.get("versionId");
+  
+  const [lesson, setLesson] = useState<LessonSpec | null>(null);
+  const [loadingLesson, setLoadingLesson] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
   const [state, dispatch] = useReducer(pdcaReducer, initialPDCAState);
   const { submit, loading, error } = useSubmitAttempt();
-  const lesson = mockRustLesson; // Hardcoded for now
+  const { emit } = useEmitEvent();
+
+  useEffect(() => {
+    if (!lessonId) {
+      // Fallback to mock lesson for dev if no ID provided
+      setLesson(mockRustLesson);
+      setLoadingLesson(false);
+      return;
+    }
+
+    try {
+      let version;
+      if (versionId) {
+        version = lessonStore.getVersion(versionId);
+      } else {
+        version = lessonStore.getPublishedVersion(lessonId);
+      }
+
+      if (!version) {
+        setLoadError(`Lesson not found: ${lessonId} ${versionId ? `(v: ${versionId})` : ""}`);
+      } else {
+        setLesson(version.spec);
+      }
+    } catch (e) {
+      setLoadError("Failed to load lesson.");
+    } finally {
+      setLoadingLesson(false);
+    }
+  }, [lessonId, versionId]);
+
+  const handleBlockInteract = (blockId: string, interaction: any) => {
+    if (!lesson) return;
+    
+    // Dispatch to reducer (if needed for local state)
+    dispatch({ type: "BLOCK_INTERACTED", payload: { blockId, interaction } });
+    
+    // Emit domain event
+    emit({
+      id: `evt-${Date.now()}`,
+      type: "BlockInteracted",
+      userId: "user-1",
+      timestamp: new Date().toISOString(),
+      payload: {
+        lessonId: lesson.id,
+        blockId,
+        interaction
+      }
+    });
+  };
 
   const handlePlanSubmit = async () => {
+    if (!lesson) return;
     dispatch({ type: "COMMIT_PREDICTION" });
     await submit({
       id: `att-${Date.now()}`,
@@ -40,6 +100,7 @@ export default function LearnSessionPage() {
   };
 
   const handleDoSubmit = async () => {
+    if (!lesson) return;
     dispatch({ type: "SUBMIT_DIAGNOSIS", payload: "Exercise Attempt" });
     await submit({
       id: `att-${Date.now()}`,
@@ -54,6 +115,7 @@ export default function LearnSessionPage() {
   };
 
   const handleCheckSubmit = async () => {
+    if (!lesson) return;
     dispatch({ type: "COMPLETE_CHECK" });
     await submit({
       id: `att-${Date.now()}`,
@@ -68,7 +130,21 @@ export default function LearnSessionPage() {
   };
 
   const handleActSubmit = async () => {
+    if (!lesson) return;
     dispatch({ type: "CLOSE_LOOP" });
+    
+    // Emit Lesson Completed Event
+    emit({
+      id: `evt-${Date.now()}`,
+      type: "LessonCompleted",
+      userId: "user-1",
+      timestamp: new Date().toISOString(),
+      payload: {
+        lessonId: lesson.id,
+        // skillId and courseId would come from context/props in a real app
+      }
+    });
+
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
@@ -82,7 +158,12 @@ export default function LearnSessionPage() {
     alert("Lesson Completed! Evidence gained.");
   };
 
+  if (loadingLesson) return <div className="p-8 text-center">Loading lesson...</div>;
+  if (loadError) return <div className="p-8 text-center text-red-500">{loadError}</div>;
+  if (!lesson) return null;
+
   const renderStageContent = () => {
+    if (!lesson) return null;
     const stageBlocks = lesson.stages[state.currentStage].blocks;
 
     return (
@@ -92,8 +173,13 @@ export default function LearnSessionPage() {
           
           {/* Render Blocks */}
           <div className="space-y-8">
-            {stageBlocks.map((block) => (
-              <LessonBlockRenderer key={block.id} block={block} />
+            {stageBlocks.map((block, index) => (
+              <LessonBlockRenderer 
+                key={block.id} 
+                block={block} 
+                index={index}
+                onInteract={(interaction) => handleBlockInteract(block.id, interaction)}
+              />
             ))}
           </div>
 
@@ -229,5 +315,13 @@ export default function LearnSessionPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LearnSessionPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+      <LearnSession />
+    </Suspense>
   );
 }

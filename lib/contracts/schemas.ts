@@ -33,7 +33,11 @@ export const ProgressEventSchema = z.object({
 export const AttemptSchema = z.object({
   id: z.string(),
   userId: z.string(),
+  skillId: z.string().optional(),
+  courseId: z.string().optional(),
+  lessonId: z.string().optional(),
   cuId: z.string(),
+  blockId: z.string().optional(),
   stage: z.enum(["plan", "do", "check", "act"]),
   inputs: z.record(z.string(), z.any()),
   result: z.object({

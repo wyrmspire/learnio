@@ -3,14 +3,14 @@
 import { useReducer, useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { 
-  CheckCircle2, 
-  Circle, 
-  Lock, 
-  BookOpen, 
-  Lightbulb, 
-  FileText, 
-  MessageSquare, 
+import {
+  CheckCircle2,
+  Circle,
+  Lock,
+  BookOpen,
+  Lightbulb,
+  FileText,
+  MessageSquare,
   ChevronRight,
   Play,
   Loader2
@@ -27,7 +27,7 @@ function LearnSession() {
   const searchParams = useSearchParams();
   const lessonId = searchParams.get("lessonId");
   const versionId = searchParams.get("versionId");
-  
+
   const [lesson, setLesson] = useState<LessonSpec | null>(null);
   const [loadingLesson, setLoadingLesson] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -66,10 +66,10 @@ function LearnSession() {
 
   const handleBlockInteract = (blockId: string, interaction: any) => {
     if (!lesson) return;
-    
+
     // Dispatch to reducer (if needed for local state)
     dispatch({ type: "BLOCK_INTERACTED", payload: { blockId, interaction } });
-    
+
     // Emit domain event
     emit({
       id: `evt-${Date.now()}`,
@@ -90,6 +90,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
+      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "plan",
       inputs: { prediction: state.prediction },
@@ -105,6 +107,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
+      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "do",
       inputs: { diagnosis: "Exercise Attempt" },
@@ -120,6 +124,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
+      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "check",
       inputs: {},
@@ -132,7 +138,7 @@ function LearnSession() {
   const handleActSubmit = async () => {
     if (!lesson) return;
     dispatch({ type: "CLOSE_LOOP" });
-    
+
     // Emit Lesson Completed Event
     emit({
       id: `evt-${Date.now()}`,
@@ -140,14 +146,16 @@ function LearnSession() {
       userId: "user-1",
       timestamp: new Date().toISOString(),
       payload: {
+        skillId: "skill-ai-eng", // TODO(B4): derive from routing context
         lessonId: lesson.id,
-        // skillId and courseId would come from context/props in a real app
       }
     });
 
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
+      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "act",
       inputs: { reflection: state.reflection },
@@ -170,13 +178,13 @@ function LearnSession() {
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
           <h2 className="text-xl font-semibold text-stone-900 mb-4 capitalize">{state.currentStage} Stage</h2>
-          
+
           {/* Render Blocks */}
           <div className="space-y-8">
             {stageBlocks.map((block, index) => (
-              <LessonBlockRenderer 
-                key={block.id} 
-                block={block} 
+              <LessonBlockRenderer
+                key={block.id}
+                block={block}
                 index={index}
                 onInteract={(interaction) => handleBlockInteract(block.id, interaction)}
               />
@@ -186,7 +194,7 @@ function LearnSession() {
           {/* Stage Controls */}
           <div className="mt-8 pt-6 border-t border-stone-100 flex justify-end">
             {state.currentStage === 'plan' && state.stages.plan !== 'completed' && (
-              <button 
+              <button
                 onClick={handlePlanSubmit}
                 disabled={loading} // Prediction block handles its own lock, this is stage lock
                 className="bg-stone-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-stone-800 transition-colors disabled:opacity-50 flex items-center gap-2"
@@ -195,9 +203,9 @@ function LearnSession() {
                 Commit & Proceed
               </button>
             )}
-            
+
             {state.currentStage === 'do' && (
-              <button 
+              <button
                 onClick={handleDoSubmit}
                 disabled={loading}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
@@ -208,7 +216,7 @@ function LearnSession() {
             )}
 
             {state.currentStage === 'check' && (
-              <button 
+              <button
                 onClick={handleCheckSubmit}
                 disabled={loading}
                 className="bg-stone-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-stone-800 transition-colors disabled:opacity-50 flex items-center gap-2"
@@ -219,7 +227,7 @@ function LearnSession() {
             )}
 
             {state.currentStage === 'act' && (
-              <button 
+              <button
                 onClick={handleActSubmit}
                 disabled={loading}
                 className="w-full bg-emerald-600 text-white px-4 py-3 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
@@ -242,7 +250,7 @@ function LearnSession() {
         {(['plan', 'do', 'check', 'act'] as Stage[]).map((stage) => {
           const status = state.stages[stage];
           const isActive = state.currentStage === stage;
-          
+
           return (
             <button
               key={stage}
@@ -250,9 +258,9 @@ function LearnSession() {
               disabled={status === 'locked'}
               className={cn(
                 "flex items-center gap-3 p-3 rounded-xl text-sm font-medium transition-all text-left w-full",
-                isActive ? "bg-white shadow-sm border border-stone-200 text-stone-900" : 
-                status === 'completed' ? "text-stone-600 hover:bg-stone-100" : 
-                "text-stone-400 opacity-60 cursor-not-allowed"
+                isActive ? "bg-white shadow-sm border border-stone-200 text-stone-900" :
+                  status === 'completed' ? "text-stone-600 hover:bg-stone-100" :
+                    "text-stone-400 opacity-60 cursor-not-allowed"
               )}
             >
               {status === 'completed' ? (
@@ -284,7 +292,7 @@ function LearnSession() {
             </div>
           )}
         </div>
-        
+
         {renderStageContent()}
       </div>
 

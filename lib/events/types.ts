@@ -1,4 +1,4 @@
-export type EventType = 
+export type EventType =
   | "AttemptSubmitted"
   | "HintUsed"
   | "StageCompleted"
@@ -22,8 +22,10 @@ export interface AttemptSubmittedEvent extends BaseEvent {
   type: "AttemptSubmitted";
   payload: {
     cuId: string;
+    skillId?: string;
     courseId?: string;
     lessonId?: string;
+    blockId?: string;
     stage: string;
     inputs: Record<string, any>;
   };
@@ -81,10 +83,10 @@ export interface LessonCompletedEvent extends BaseEvent {
   };
 }
 
-export type DomainEvent = 
-  | AttemptSubmittedEvent 
-  | StageCompletedEvent 
-  | CULoopClosedEvent 
+export type DomainEvent =
+  | AttemptSubmittedEvent
+  | StageCompletedEvent
+  | CULoopClosedEvent
   | ConfidenceUpdatedEvent
   | BlockInteractedEvent
   | HintRevealedEvent

@@ -18,12 +18,14 @@ export function submitAttemptCommand(attempt: Attempt): DomainEvent[] {
     type: "AttemptSubmitted",
     timestamp: now,
     userId: attempt.userId,
-    payload: { 
-      cuId: attempt.cuId, 
+    payload: {
+      cuId: attempt.cuId,
+      skillId: attempt.skillId,
       courseId: attempt.courseId,
       lessonId: attempt.lessonId,
-      stage: attempt.stage, 
-      inputs: attempt.inputs 
+      blockId: attempt.blockId,
+      stage: attempt.stage,
+      inputs: attempt.inputs
     }
   });
 
@@ -39,8 +41,8 @@ export function submitAttemptCommand(attempt: Attempt): DomainEvent[] {
       type: "ConfidenceUpdated",
       timestamp: now,
       userId: attempt.userId,
-      payload: { 
-        cuId: attempt.cuId, 
+      payload: {
+        cuId: attempt.cuId,
         delta: finalDelta,
         reason: attempt.hintsUsed > 0 ? "hint_penalty" : "loop_closed"
       }

@@ -212,6 +212,7 @@ describe("Determinism: Date.now() allowed only in approved files", () => {
         "lesson-store.ts",   // seed() staleAfter
         "loader.ts",         // installSkill staleAfter
         "staged-compiler.ts", // compile() runId generation
+        "curriculum-builder-stub.ts", // stub compiler runId generation
         "mock.ts",            // session object factory (id generation)
     ];
 

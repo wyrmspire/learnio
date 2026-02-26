@@ -50,7 +50,7 @@
 
 ### A1 · Create `validate:skills` CLI Script
 
-**Status**: 🔨 STARTED — Agent Antigravity — 2026-02-25T22:54:40-06:00
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:05:00-06:00
 
 **Context to Read First**:
 - `lib/contracts/skills.ts`, `lib/contracts/lesson.ts`, `lib/contracts/compiler.ts`, `lib/skills/loader.ts`, `lib/data/seed-curriculum.ts`, `package.json`
@@ -103,7 +103,7 @@
 
 ### A3 · Enforce Lesson Immutability (`specHash` and history)
 
-**Status**: 🔨 STARTED — Agent Antigravity — 2026-02-25T22:54:40-06:00
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:05:00-06:00
 
 **Context to Read First**:
 - `lib/data/lesson-store.ts`, `lib/contracts/compiler.ts`, `app/learn/page.tsx`
@@ -175,7 +175,7 @@
 
 ### B2 · Standardize Block-Level Event Emission
 
-**Status**: 🔨 STARTED — Agent Antigravity-B — 2026-02-25T23:00:00-06:00
+**Status**: ✅ COMPLETE — Agent Antigravity-B — 2026-02-25T23:01:55-06:00
 
 **Context to Read First**:
 - `app/learn/components/LessonRenderer.tsx`, `app/learn/page.tsx`, `lib/events/types.ts`
@@ -576,7 +576,8 @@ Do Lane A (immutability), Lane B (identity), and Lane C (progress computation) f
 
 | Timestamp | Agent | Note |
 |-----------|-------|------|
-| _empty_   |       |      |
+| 2026-02-25T23:05:00-06:00 | Antigravity | **A1** done: `scripts/validate-skills.ts` + `"validate:skills"` in package.json. **tsx** added as devDep. **A3** done: `specHash` on `LessonVersionSchema`, `lib/data/spec-hash.ts` (pure sha256), immutability enforcement in `saveVersion()`, `getVersionHistory()`, 9 tests all green. Commit: c810bc5. |
+| 2026-02-25T23:05:00-06:00 | Antigravity | Note for other agents: `computeSpecHash()` in `lib/data/spec-hash.ts` is available for any code needing deterministic LessonSpec hashing. Do NOT call `Date.now()` or `Math.random()` in validators/projectors — see GLOBAL RULES. |
 
 ---
 

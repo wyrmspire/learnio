@@ -1,13 +1,13 @@
-import { 
-  LessonBlock, 
-  ExplainerBlock, 
-  DiagramBlock, 
-  ScenarioBlock, 
-  PredictionBlock, 
-  ExerciseBlock, 
-  QuizBlock, 
-  ReflectionBlock, 
-  TodoBlock 
+import {
+  LessonBlock,
+  ExplainerBlock,
+  DiagramBlock,
+  ScenarioBlock,
+  PredictionBlock,
+  ExerciseBlock,
+  QuizBlock,
+  ReflectionBlock,
+  TodoBlock
 } from "@/lib/contracts/lesson";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
@@ -70,7 +70,7 @@ function PredictionRenderer({ block, onInteract }: BlockProps<PredictionBlock>) 
         Prediction <span className="text-rose-500">*</span>
       </label>
       <p className="text-stone-600">{block.prompt}</p>
-      
+
       <textarea
         className="w-full border border-stone-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-stone-500 outline-none transition-all"
         rows={3}
@@ -79,7 +79,7 @@ function PredictionRenderer({ block, onInteract }: BlockProps<PredictionBlock>) 
         onChange={(e) => setPrediction(e.target.value)}
         disabled={committed}
       />
-      
+
       {!committed ? (
         <button
           onClick={handleCommit}
@@ -106,15 +106,21 @@ function PredictionRenderer({ block, onInteract }: BlockProps<PredictionBlock>) 
   );
 }
 
-function ExerciseRenderer({ block }: BlockProps<ExerciseBlock>) {
+function ExerciseRenderer({ block, onInteract }: BlockProps<ExerciseBlock>) {
   const [code, setCode] = useState(block.initialCode || "");
   const [hintsRevealed, setHintsRevealed] = useState(0);
   const [showSolution, setShowSolution] = useState(false);
 
+  const handleRevealHint = () => {
+    const nextIndex = hintsRevealed;
+    setHintsRevealed((h) => h + 1);
+    onInteract?.({ type: "hint_revealed", hintIndex: nextIndex });
+  };
+
   return (
     <div className="space-y-4 my-6">
       <div className="font-medium text-stone-900">{block.prompt}</div>
-      
+
       {/* Mock Code Editor */}
       <div className="relative group">
         <div className="absolute top-0 right-0 px-2 py-1 bg-stone-800 text-stone-400 text-xs rounded-bl-lg rounded-tr-lg font-mono">
@@ -141,8 +147,8 @@ function ExerciseRenderer({ block }: BlockProps<ExerciseBlock>) {
         {block.hints.length > 0 && (
           <div className="flex flex-col items-end gap-2">
             {hintsRevealed < block.hints.length ? (
-              <button 
-                onClick={() => setHintsRevealed(h => h + 1)}
+              <button
+                onClick={handleRevealHint}
                 className="text-sm text-amber-600 hover:text-amber-700 flex items-center gap-1 font-medium"
               >
                 <Lightbulb className="w-4 h-4" />
@@ -184,8 +190,8 @@ function QuizRenderer({ block }: BlockProps<QuizBlock>) {
             disabled={submitted}
             className={cn(
               "w-full text-left p-3 rounded-lg border text-sm transition-all flex items-center justify-between",
-              selected === opt.id 
-                ? "border-blue-500 bg-blue-50 text-blue-900 ring-1 ring-blue-500" 
+              selected === opt.id
+                ? "border-blue-500 bg-blue-50 text-blue-900 ring-1 ring-blue-500"
                 : "border-stone-200 hover:bg-stone-50 text-stone-700",
               submitted && opt.isCorrect && "border-emerald-500 bg-emerald-50 text-emerald-900 ring-1 ring-emerald-500",
               submitted && selected === opt.id && !opt.isCorrect && "border-rose-500 bg-rose-50 text-rose-900 ring-1 ring-rose-500"
@@ -236,7 +242,7 @@ function ReflectionRenderer({ block }: BlockProps<ReflectionBlock>) {
 function TodoRenderer({ block }: BlockProps<TodoBlock>) {
   const [checked, setChecked] = useState(false);
   return (
-    <div 
+    <div
       onClick={() => setChecked(!checked)}
       className={cn(
         "flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all my-2",

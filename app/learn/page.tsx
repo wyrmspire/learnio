@@ -70,7 +70,7 @@ function LearnSession() {
     // Dispatch to reducer (if needed for local state)
     dispatch({ type: "BLOCK_INTERACTED", payload: { blockId, interaction } });
 
-    // Emit domain event
+    // Emit BlockInteracted for every interaction (lessonId + blockId for full identity)
     emit({
       id: `evt-${Date.now()}`,
       type: "BlockInteracted",
@@ -82,6 +82,21 @@ function LearnSession() {
         interaction
       }
     });
+
+    // Additionally emit HintRevealed when a hint is revealed
+    if (interaction?.type === "hint_revealed") {
+      emit({
+        id: `evt-${Date.now()}-hint`,
+        type: "HintRevealed",
+        userId: "user-1",
+        timestamp: new Date().toISOString(),
+        payload: {
+          lessonId: lesson.id,
+          blockId,
+          hintIndex: interaction.hintIndex as number,
+        }
+      });
+    }
   };
 
   const handlePlanSubmit = async () => {

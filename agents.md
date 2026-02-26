@@ -347,7 +347,10 @@
 
 ### D2 · Build Teacher Panel Data Contract
 
-**Status**: 🔨 STARTED — Agent Antigravity — 2026-02-25T22:57:00-06:00
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:02:45-06:00
+
+**Agent Notes**:
+> Created `lib/contracts/teacher.ts` (TeacherContext/TeacherResponse interfaces) and `lib/data/teacher-context-builder.ts` (pure buildTeacherContext()). Latest attempt filter is strict: payload.lessonId AND blockId must match. Citation scoping returns all lesson citations (block-level citation refs not in schema yet). 11/11 tests pass.
 
 **Context to Read First**:
 - `lib/contracts/lesson.ts`, `lib/contracts/teacher.ts`, `app/learn/page.tsx`
@@ -367,7 +370,7 @@
 
 ### D3 · Scaffold Curriculum Builder Workflow Types
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity-B — 2026-02-25T23:05:00-06:00
 
 **Context to Read First**:
 - `lib/contracts/skills.ts`, `lib/contracts/compiler.ts`
@@ -386,7 +389,10 @@
 
 ### D4 · Regression-Proofing: Determinism Audit
 
-**Status**: 🔨 STARTED — Agent Antigravity — 2026-02-25T22:57:00-06:00
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:02:45-06:00
+
+**Agent Notes**:
+> Created `lib/data/determinism-audit.test.ts` with 8 checks: projectCourseProgress/staleness (10-run stress), PDCA reducer (10 replays), Math.random() grep (comment-line aware), Date.now() scope check. Found and fixed `Math.random()` in `staged-compiler.ts:75`. Expanded Date.now() allowlist to include staged-compiler.ts and mock.ts. 8/8 tests pass.
 
 **Context to Read First**:
 - `/lib/*`

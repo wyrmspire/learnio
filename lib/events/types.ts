@@ -5,7 +5,11 @@ export type EventType =
   | "CULoopClosed"
   | "EvidenceGained"
   | "TransferTestPassed"
-  | "ConfidenceUpdated";
+  | "ConfidenceUpdated"
+  // New Events
+  | "BlockInteracted"
+  | "HintRevealed"
+  | "LessonCompleted";
 
 export interface BaseEvent {
   id: string;
@@ -18,6 +22,8 @@ export interface AttemptSubmittedEvent extends BaseEvent {
   type: "AttemptSubmitted";
   payload: {
     cuId: string;
+    courseId?: string;
+    lessonId?: string;
     stage: string;
     inputs: Record<string, any>;
   };
@@ -48,4 +54,38 @@ export interface ConfidenceUpdatedEvent extends BaseEvent {
   };
 }
 
-export type DomainEvent = AttemptSubmittedEvent | StageCompletedEvent | CULoopClosedEvent | ConfidenceUpdatedEvent; // Expand as needed
+export interface BlockInteractedEvent extends BaseEvent {
+  type: "BlockInteracted";
+  payload: {
+    lessonId: string;
+    blockId: string;
+    interaction: any;
+  };
+}
+
+export interface HintRevealedEvent extends BaseEvent {
+  type: "HintRevealed";
+  payload: {
+    lessonId: string;
+    blockId: string;
+    hintIndex: number;
+  };
+}
+
+export interface LessonCompletedEvent extends BaseEvent {
+  type: "LessonCompleted";
+  payload: {
+    skillId?: string;
+    courseId?: string;
+    lessonId: string;
+  };
+}
+
+export type DomainEvent = 
+  | AttemptSubmittedEvent 
+  | StageCompletedEvent 
+  | CULoopClosedEvent 
+  | ConfidenceUpdatedEvent
+  | BlockInteractedEvent
+  | HintRevealedEvent
+  | LessonCompletedEvent;

@@ -99,7 +99,10 @@ export class MockContentCompiler implements ContentCompiler {
       lessonId: lesson.id,
       spec: lesson,
       compilerRunId: runId,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      sourceProvider: "mock_llm" as const,
+      refreshPolicyDays: 90,
+      staleAfter: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
     };
     
     const validVersion = await this.simulateStep(version, LessonVersionSchema, this.delay);

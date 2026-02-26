@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LessonSpec } from "@/lib/contracts/lesson";
-import { seedCurriculum } from "@/lib/data/seed-curriculum";
+import { skillLoader } from "@/lib/skills/loader";
 import { MockContentCompiler } from "@/lib/data/mock-compiler";
 import { CompilerRun, LessonVersion } from "@/lib/contracts/compiler";
 import { lessonStore } from "@/lib/data/lesson-store";
@@ -41,10 +41,15 @@ export default function SettingsPage() {
 
   const addLog = (msg: string) => setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
 
-  const handleSeed = () => {
-    lessonStore.seed(seedCurriculum);
-    setPublishedLessons(lessonStore.getAllPublishedLessons());
-    addLog("Seeded curriculum with 3 flagship lessons.");
+  const handleInstallSkill = async () => {
+    addLog("Installing 'AI Engineering' skill bundle...");
+    try {
+      await skillLoader.installSkill("skill-ai-eng");
+      setPublishedLessons(lessonStore.getAllPublishedLessons());
+      addLog("Skill installed successfully! Lessons available in runner.");
+    } catch (e) {
+      addLog(`Error installing skill: ${(e as Error).message}`);
+    }
   };
 
   const updateRun = (run: CompilerRun) => {
@@ -160,11 +165,11 @@ export default function SettingsPage() {
         </div>
         <div className="flex gap-2 relative">
            <button 
-             onClick={handleSeed}
+             onClick={handleInstallSkill}
              className="text-emerald-600 hover:text-emerald-700 p-2 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center gap-2"
            >
              <Database className="w-4 h-4" />
-             <span className="text-xs font-medium">Seed Curriculum</span>
+             <span className="text-xs font-medium">Install AI Eng Skill</span>
            </button>
 
            <button 

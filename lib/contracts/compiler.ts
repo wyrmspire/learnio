@@ -65,6 +65,11 @@ export const LessonVersionSchema = z.object({
   compilerRunId: z.string(),
   createdAt: z.string(),
   publishedAt: z.string().optional(),
+  
+  // Provenance & Refresh Policy
+  sourceProvider: z.enum(["mock_llm", "perplexity", "manual_seed"]),
+  refreshPolicyDays: z.number().default(90),
+  staleAfter: z.string().optional(), // ISO Date
 });
 
 // --- Inferred Types ---

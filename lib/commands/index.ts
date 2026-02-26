@@ -18,7 +18,13 @@ export function submitAttemptCommand(attempt: Attempt): DomainEvent[] {
     type: "AttemptSubmitted",
     timestamp: now,
     userId: attempt.userId,
-    payload: { cuId: attempt.cuId, stage: attempt.stage, inputs: attempt.inputs }
+    payload: { 
+      cuId: attempt.cuId, 
+      courseId: attempt.courseId,
+      lessonId: attempt.lessonId,
+      stage: attempt.stage, 
+      inputs: attempt.inputs 
+    }
   });
 
   // 2. If it's the final stage, close the loop and calculate confidence

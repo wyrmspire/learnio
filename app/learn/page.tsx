@@ -27,6 +27,8 @@ function LearnSession() {
   const searchParams = useSearchParams();
   const lessonId = searchParams.get("lessonId");
   const versionId = searchParams.get("versionId");
+  const skillId = searchParams.get("skillId") || undefined;
+  const courseId = searchParams.get("courseId") || undefined;
 
   const [lesson, setLesson] = useState<LessonSpec | null>(null);
   const [loadingLesson, setLoadingLesson] = useState(true);
@@ -105,7 +107,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
-      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      skillId,
+      courseId,
       lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "plan",
@@ -122,7 +125,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
-      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      skillId,
+      courseId,
       lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "do",
@@ -139,7 +143,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
-      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      skillId,
+      courseId,
       lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "check",
@@ -161,7 +166,8 @@ function LearnSession() {
       userId: "user-1",
       timestamp: new Date().toISOString(),
       payload: {
-        skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+        skillId,
+        courseId,
         lessonId: lesson.id,
       }
     });
@@ -169,7 +175,8 @@ function LearnSession() {
     await submit({
       id: `att-${Date.now()}`,
       userId: "user-1",
-      skillId: "skill-ai-eng", // TODO(B4): derive from routing context
+      skillId,
+      courseId,
       lessonId: lesson.id,
       cuId: lesson.cuIds[0],
       stage: "act",

@@ -196,7 +196,7 @@
 
 ### B3 · Write Event Plumbing Integration Test
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity-B — 2026-02-25T23:14:00-06:00
 **⛓️ BLOCKED BY**: B1
 
 **Context to Read First**:
@@ -217,7 +217,7 @@
 
 ### B4 · Remove Hardcoded `skillId` in Learn Page
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity-B — 2026-02-25T23:16:00-06:00
 **⛓️ BLOCKED BY**: B1
 
 **Context to Read First**:

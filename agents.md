@@ -27,7 +27,10 @@
 
 ### 0.1 · Update `ARCHITECTURE_CONSTITUTION.md`
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:40:00-06:00
+
+**Agent Notes**:
+> Appended current Phase 2 capabilities (DomainEvents, Read Models) and structural requirements (validations, specHash, LocalSearch) as reference anchors to the bottom of `ARCHITECTURE_CONSTITUTION.md` and `AI_WORKING_GUIDE.md` so future agents are aligned with what exists currently.
 **Context to Read First**:
 - `ARCHITECTURE_CONSTITUTION.md`, `AI_WORKING_GUIDE.md`
 
@@ -78,8 +81,11 @@
 
 ### A2 · Wire Validator into `SkillLoader.installSkill()`
 
-**Status**: ⬜ OPEN
-**⛓️ BLOCKED BY**: A1
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:31:00-06:00
+**⛓️ BLOCKED BY**: A1 (unblocked)
+
+**Agent Notes**:
+> Extracted validation logic to `lib/skills/validator.ts` as `validateBundle()`. Added unit tests for uniqueness constraints and dangling refs. Refactored `scripts/validate-skills.ts` to use it. Wired into `SkillLoader.installSkill()`. Added integration tests in `loader.test.ts`. All tests passing.
 
 **Context to Read First**:
 - `lib/skills/loader.ts` — `installSkill()`
@@ -126,7 +132,7 @@
 
 ### A4 · Add Provenance Fields End-to-End Verification
 
-**Status**: ⬜ OPEN
+**Status**: 🔨 STARTED — Agent Antigravity-B — 2026-02-25T23:25:00-06:00
 
 **Context to Read First**:
 - `lib/contracts/compiler.ts`, `lib/data/lesson-store.ts`, `lib/skills/loader.ts`, `lib/data/mock-compiler.ts`
@@ -484,8 +490,11 @@
 
 ### F2 · Implement `LocalIndexSearchProvider`
 
-**Status**: ⬜ OPEN
-**⛓️ BLOCKED BY**: A3
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:38:00-06:00
+**⛓️ BLOCKED BY**: A3 (unblocked)
+
+**Agent Notes**:
+> Implemented `LocalIndexSearchProvider` in `lib/search/local-index.ts`. Queries against published lessons from `LessonStore`, scoring based on matches in title, topic, description, and block text. Also generates text snippets. Verified with 4 unit tests.
 
 **Context to Read First**:
 - `PHASE_1_2_3_PLAN.md`
@@ -525,12 +534,12 @@
 ## LANE G — End-to-End Hardening
 
 **Goal**: Assure that all the isolated parts compose flawlessly in the browser.
-
----
-
 ### G1 · Event Store Replay & Hydration Test
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-25T23:48:00-06:00
+
+**Agent Notes**:
+> The `store.test.ts` hydration test was verified to correctly rehydrate `localStorage` mock events and `deriveProgressFeedReadModel()` returned identical projections pre- and post-hydration.
 
 **Context to Read First**:
 - `lib/events/store.ts`
@@ -584,6 +593,7 @@ Do Lane A (immutability), Lane B (identity), and Lane C (progress computation) f
 |-----------|-------|------|
 | 2026-02-25T23:05:00-06:00 | Antigravity | **A1** done: `scripts/validate-skills.ts` + `"validate:skills"` in package.json. **tsx** added as devDep. **A3** done: `specHash` on `LessonVersionSchema`, `lib/data/spec-hash.ts` (pure sha256), immutability enforcement in `saveVersion()`, `getVersionHistory()`, 9 tests all green. Commit: c810bc5. |
 | 2026-02-25T23:05:00-06:00 | Antigravity | Note for other agents: `computeSpecHash()` in `lib/data/spec-hash.ts` is available for any code needing deterministic LessonSpec hashing. Do NOT call `Date.now()` or `Math.random()` in validators/projectors — see GLOBAL RULES. |
+| 2026-02-25T23:48:00-06:00 | Antigravity | **G1** done: Created `lib/events/store.test.ts` to mock `localStorage`, append events, reset in-memory store, hydrate, and verify that `initialProjection` matches `rehydratedProjection` identically. |
 
 ---
 

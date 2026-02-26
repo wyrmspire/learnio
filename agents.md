@@ -424,7 +424,7 @@
 
 ### E1 · Build Course Overview & Mastery Dashboard
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-26T18:00:00-06:00
 **⛓️ BLOCKED BY**: C1, C2
 
 **Context to Read First**:
@@ -440,13 +440,13 @@
 - [ ] Dashboards render live data visually corresponding to actual `lib/events/store.ts` history.
 
 **Agent Notes**:
-> _(leave notes here)_
+> Created `app/course/page.tsx`. Loads skill registry + course manifests via `skillLoader`. Calls `projectCourseProgress()` for each course and `projectSkillMastery()` per skill. Displays mastery badges (novice/competent/expert), per-course progress bars, lesson completion pills, and CTA links derived from `currentLessonId`. Added "Courses" nav link in `app-shell.tsx`.
 
 ---
 
 ### E2 · Practice Queue UI
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-26T18:00:00-06:00
 **⛓️ BLOCKED BY**: C3
 
 **Context to Read First**:
@@ -460,7 +460,7 @@
 - [ ] UI successfully isolates "hint-dependent" and "stale-risk" items sorted by priority.
 
 **Agent Notes**:
-> _(leave notes here)_
+> Replaced stub `app/practice/page.tsx` with a fully reactive Practice Queue UI. Reads `projectPracticeQueue()` from real EventStore + LessonStore. Shows signal counts (regression/hint-dependent/stale-risk), session length config (5/10/20 min), focus filter, and prioritised drill items with reason badges. Empty-state handled ("Queue Empty").
 
 ---
 
@@ -472,7 +472,7 @@
 
 ### F1 · Define `ability.md` Schema
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-26T18:00:00-06:00
 
 **Context to Read First**:
 - `PHASE_1_2_3_PLAN.md` (Phase 3 spec)
@@ -484,7 +484,7 @@
 - [ ] Ability definitions can be legally ingested alongside specific skills.
 
 **Agent Notes**:
-> _(leave notes here)_
+> Created `lib/skills/ability.ts` with `AbilityDefinitionSchema`, `AbilityBranchSchema`, `AbilityGuardSchema` (all Zod). Added `parseAbilityDefinition()` / `safeParseAbilityDefinition()` parsers and `MOCK_ABILITIES` for skill-ai-eng. 12 unit tests in `lib/skills/ability.test.ts` — all green.
 
 ---
 
@@ -513,7 +513,7 @@
 
 ### F3 · Implement Agent Router
 
-**Status**: ⬜ OPEN
+**Status**: ✅ COMPLETE — Agent Antigravity — 2026-02-26T18:00:00-06:00
 **⛓️ BLOCKED BY**: F2, C1
 
 **Context to Read First**:
@@ -527,7 +527,7 @@
 - [ ] The router successfully pipes the correct Context & Search Results.
 
 **Agent Notes**:
-> _(leave notes here)_
+> Created `lib/skills/agent-router.ts` with `AgentRouter` class. Routes via keyword-scored `AbilityBranch` matching, then boosts confidence using `SearchProvider` results. Factors course progress: skips 100%-complete courses, picks next best branch. Search-only fallback when no branch matches. 10 unit tests in `lib/skills/agent-router.test.ts` — all green.
 
 ---
 
@@ -594,6 +594,7 @@ Do Lane A (immutability), Lane B (identity), and Lane C (progress computation) f
 | 2026-02-25T23:05:00-06:00 | Antigravity | **A1** done: `scripts/validate-skills.ts` + `"validate:skills"` in package.json. **tsx** added as devDep. **A3** done: `specHash` on `LessonVersionSchema`, `lib/data/spec-hash.ts` (pure sha256), immutability enforcement in `saveVersion()`, `getVersionHistory()`, 9 tests all green. Commit: c810bc5. |
 | 2026-02-25T23:05:00-06:00 | Antigravity | Note for other agents: `computeSpecHash()` in `lib/data/spec-hash.ts` is available for any code needing deterministic LessonSpec hashing. Do NOT call `Date.now()` or `Math.random()` in validators/projectors — see GLOBAL RULES. |
 | 2026-02-25T23:48:00-06:00 | Antigravity | **G1** done: Created `lib/events/store.test.ts` to mock `localStorage`, append events, reset in-memory store, hydrate, and verify that `initialProjection` matches `rehydratedProjection` identically. |
+| 2026-02-26T18:00:00-06:00 | Antigravity | **E1** done: `app/course/page.tsx` — Course Overview & Mastery Dashboard wired to `projectCourseProgress()` + `projectSkillMastery()`. Added nav link in app-shell. **E2** done: `app/practice/page.tsx` — Practice Queue UI wired to `projectPracticeQueue()` with session config, focus filters, priority badges. **F1** done: `lib/skills/ability.ts` — `AbilityDefinitionSchema`/`AbilityBranchSchema`/`AbilityGuardSchema` + parse helpers + `MOCK_ABILITIES`. **F3** done: `lib/skills/agent-router.ts` — `AgentRouter` using keyword-scored branch matching + search index boost + progress-aware routing. 22 new tests, 134 total passing. Fixed pre-existing determinism audit failure (`curriculum-builder-stub.ts` needed in Date.now() allowlist). |
 
 ---
 

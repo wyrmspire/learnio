@@ -13,11 +13,13 @@ import {
   Settings,
   Bell,
   User,
-  Focus
+  Focus,
+  Layers,
 } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Courses", href: "/course", icon: Layers },
   { name: "Learn", href: "/learn", icon: GraduationCap },
   { name: "Practice", href: "/practice", icon: Dumbbell },
   { name: "Assess", href: "/assess", icon: CheckSquare },
@@ -95,7 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           </div>
         </header>
-        
+
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 md:p-8">
           <div className="max-w-6xl mx-auto">

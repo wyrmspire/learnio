@@ -100,3 +100,10 @@ Later:
 Rule:
 Do NOT implement future stages early.
 Only scaffold them.
+
+## Current Domain Reference
+
+- **Events Emitted**: `AttemptSubmitted`, `ConfidenceUpdated`, `CULoopClosed`, `BlockInteracted`, `HintRevealed`, `LessonCompleted`.
+- **Read Models**: `CourseProgress`, `SkillMastery`, `PracticeQueue`, `StalenessReport`.
+- **Packaging/Pipeline**: Run `validate:skills` script to deterministically verify bundles (`skillId` unique, no dangling refs). `LessonVersions` feature strictly verified `specHash` values to guarantee immutability.
+- **Search Capability**: Agents can retrieve index documents natively via `LocalIndexSearchProvider`.

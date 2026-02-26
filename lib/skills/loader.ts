@@ -1,13 +1,14 @@
-import { 
-  SkillRegistry, 
-  SkillManifest, 
-  CourseManifest, 
-  SkillRegistrySchema, 
-  SkillManifestSchema, 
-  CourseManifestSchema 
+import {
+  SkillRegistry,
+  SkillManifest,
+  CourseManifest,
+  SkillRegistrySchema,
+  SkillManifestSchema,
+  CourseManifestSchema
 } from "../contracts/skills";
 import { LessonSpec, LessonSpecSchema } from "../contracts/lesson";
 import { lessonStore } from "../data/lesson-store";
+import { validateBundle } from "./validator";
 
 // --- Mock File System ---
 // In a real app, this would read from /skills/*.json
@@ -46,7 +47,7 @@ const MOCK_COURSES: Record<string, CourseManifest> = {
 import { seedCurriculum } from "../data/seed-curriculum";
 
 export class SkillLoader {
-  
+
   async loadRegistry(): Promise<SkillRegistry> {
     // Validate schema at boundary
     return SkillRegistrySchema.parse(MOCK_REGISTRY);
@@ -76,9 +77,29 @@ export class SkillLoader {
    */
   async installSkill(skillId: string) {
     console.log(`[SkillLoader] Installing skill: ${skillId}...`);
-    
+
+    // We get the raw manifest, course and lessons
+    const manifestRaw = MOCK_SKILLS[skillId];
+    if (!manifestRaw) throw new Error(`Skill ${skillId} not found`);
+
+    const coursesRaw = Object.values(MOCK_COURSES).filter(c => c.skillId === skillId);
+
+    const lessonsRaw: unknown[] = [];
+    for (const c of coursesRaw) {
+      for (const lessonId of c.lessonOrder) {
+        const l = seedCurriculum.find(l => l.id === lessonId);
+        if (l) lessonsRaw.push(l);
+      }
+    }
+
+    // Validate the bundle before ingestion
+    const validation = validateBundle([manifestRaw], coursesRaw, lessonsRaw);
+    if (validation.errors.length > 0) {
+      throw new Error(`Failed to install skill ${skillId}:\n` + validation.errors.join("\n"));
+    }
+
     const manifest = await this.loadSkillManifest(skillId);
-    
+
     // Find all courses for this skill
     const courseIds = Object.values(MOCK_COURSES)
       .filter(c => c.skillId === skillId)
@@ -87,18 +108,18 @@ export class SkillLoader {
     for (const courseId of courseIds) {
       const course = await this.loadCourse(courseId);
       console.log(`[SkillLoader] Installing course: ${course.title}`);
-      
+
       for (const lessonId of course.lessonOrder) {
         const lesson = await this.loadLesson(lessonId);
-        
+
         // Use the store's existing logic to save/publish
         // We simulate a "seed run" for provenance
         const versionId = `ver-${lesson.id}-${lesson.version}`;
-        
+
         // Check if already installed to avoid dupes
         if (lessonStore.getPublishedVersion(lesson.id)) {
-             console.log(`[SkillLoader] Lesson ${lesson.id} already installed. Skipping.`);
-             continue;
+          console.log(`[SkillLoader] Lesson ${lesson.id} already installed. Skipping.`);
+          continue;
         }
 
         const version: import("../contracts/compiler").LessonVersion = {
@@ -112,13 +133,13 @@ export class SkillLoader {
           refreshPolicyDays: 365,
           staleAfter: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
         };
-        
+
         lessonStore.saveVersion(version);
         lessonStore.publishVersion(lesson.id, versionId);
         console.log(`[SkillLoader] Installed lesson: ${lesson.title}`);
       }
     }
-    
+
     console.log(`[SkillLoader] Skill ${skillId} installation complete.`);
   }
 }

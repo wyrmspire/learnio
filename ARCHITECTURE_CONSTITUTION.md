@@ -72,3 +72,19 @@ Before a lesson can be published or run:
 *   **Adding a New Event:** Define the event type in `lib/events/types.ts`, update the relevant command to emit it, and update read models to consume it.
 *   **Modifying Confidence Logic:** Change the calculation in the *Command*, ensuring it remains deterministic based on inputs.
 *   **Adding a New Lesson Block Type:** Update the `LessonSpec` schema, add a renderer component in the UI, and update the compiler to generate it.
+
+## 7. Current Domain Events & Read Models (v1)
+
+### Core Events
+- `AttemptSubmitted`: Learner submitted a block (includes full provenance: `skillId`, `courseId`, `lessonId`, `blockId`).
+- `ConfidenceUpdated`: Emitted by command when checking evidence.
+- `CULoopClosed`: Full Plan-Do-Check-Act cycle completed.
+- `BlockInteracted`: General block usage log (e.g. focused, typed).
+- `HintRevealed`: Learner clicked a hint.
+- `LessonCompleted`: Learner passed validation for all required blocks.
+
+### Core Read Models
+- `CourseProgress`: Determines `percentComplete` and next lesson from completed lesson events and course manifest `lessonOrder`.
+- `SkillMastery`: Derives novice/competent/expert traits from course completions.
+- `PracticeQueue`: Spaced repetition model isolating hint usage, staleness, and regressions to schedule review tasks.
+- `StalenessReport`: Tracks `staleAfter` thresholds on published lessons vs `now` to prompt refreshes.

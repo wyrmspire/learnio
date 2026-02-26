@@ -39,11 +39,17 @@ export const ValidationReportSchema = z.object({
 
 // --- Compiler Run ---
 
+/** The 5 ordered phases of the staged content pipeline. */
+export const COMPILER_PHASES = ["brief", "skeleton", "blocks", "validate", "package"] as const;
+export type CompilerPhase = typeof COMPILER_PHASES[number];
+
 export const CompilerRunSchema = z.object({
   id: z.string(),
   timestamp: z.string(),
   topic: z.string(),
-  status: z.enum(["pending", "completed", "failed"]),
+  /** Current pipeline phase — undefined means not yet started. */
+  phase: z.enum(["brief", "skeleton", "blocks", "validate", "package"]).optional(),
+  status: z.enum(["pending", "running", "completed", "failed"]),
   artifacts: z.object({
     brief: ResearchBriefSchema.optional(),
     skeleton: LessonSkeletonSchema.optional(),
@@ -65,11 +71,15 @@ export const LessonVersionSchema = z.object({
   compilerRunId: z.string(),
   createdAt: z.string(),
   publishedAt: z.string().optional(),
-  
+
+  // Immutability: sha256 of canonicalized (sorted-key) spec JSON
+  specHash: z.string().optional(),
+
   // Provenance & Refresh Policy
   sourceProvider: z.enum(["mock_llm", "perplexity", "manual_seed"]),
   refreshPolicyDays: z.number().default(90),
   staleAfter: z.string().optional(), // ISO Date
+  generatedAt: z.string().optional(), // defaults to createdAt if not set
 });
 
 // --- Inferred Types ---

@@ -16,7 +16,8 @@ import { validateBundle } from "./validator";
 
 const MOCK_REGISTRY: SkillRegistry = {
   skills: [
-    { id: "skill-ai-eng", path: "ai-engineering", version: "1.0.0" }
+    { id: "skill-ai-eng", path: "ai-engineering", version: "1.0.0" },
+    { id: "skill-cnc-machinist", path: "cnc-machinist", version: "1.0.0" },
   ]
 };
 
@@ -30,6 +31,17 @@ const MOCK_SKILLS: Record<string, SkillManifest> = {
     branches: [
       { intent: "learn evals", targetCourseId: "course-ai-evals" }
     ]
+  },
+  "skill-cnc-machinist": {
+    id: "skill-cnc-machinist",
+    name: "Job Shop CNC Machinist",
+    description: "Master manual machining, precision grinding, and CNC programming for job shop manufacturing.",
+    version: "1.0.0",
+    tags: ["machining", "cnc", "manufacturing", "manual", "grinding"],
+    branches: [
+      { intent: "learn manual machining", targetCourseId: "course-manual-machining" },
+      { intent: "learn cnc", targetCourseId: "course-cnc-fundamentals" }
+    ]
   }
 };
 
@@ -40,6 +52,20 @@ const MOCK_COURSES: Record<string, CourseManifest> = {
     title: "Reliable AI Systems",
     description: "From vibes to metrics.",
     lessonOrder: ["lesson-ai-evals", "lesson-rag-patterns", "lesson-tool-use"]
+  },
+  "course-manual-machining": {
+    id: "course-manual-machining",
+    skillId: "skill-cnc-machinist",
+    title: "Manual Machining Principles",
+    description: "Foundations of chip making, safety, and manual operations including grinding and heat treating.",
+    lessonOrder: ["lesson-manual-basics", "lesson-grinding-ht"]
+  },
+  "course-cnc-fundamentals": {
+    id: "course-cnc-fundamentals",
+    skillId: "skill-cnc-machinist",
+    title: "CNC Fundamentals",
+    description: "Transitioning to Computer Numerical Control and G-code basics.",
+    lessonOrder: ["lesson-cnc-intro"]
   }
 };
 

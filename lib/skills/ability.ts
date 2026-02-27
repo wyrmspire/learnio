@@ -165,4 +165,32 @@ export const MOCK_ABILITIES: Record<string, AbilityDefinition> = {
             minimumMastery: "novice",
         },
     }),
+    "skill-cnc-machinist": parseAbilityDefinition({
+        skillId: "skill-cnc-machinist",
+        name: "Job Shop CNC Machinist",
+        description:
+            "Teaches learners manual machining foundations, precision grinding, heat treating, and introduction to CNC programming.",
+        version: "1.0.0",
+        scopeTags: ["machining", "cnc", "manufacturing", "manual", "grinding", "heat-treat"],
+        branches: [
+            {
+                intent: "learn manual machining",
+                targetCourseId: "course-manual-machining",
+                keywords: ["manual", "chip", "safety", "rpm", "feed", "grind", "heat", "treat", "tempering", "hardening"],
+                description:
+                    "Route learners asking about manual machining basics, grinding, or heat treating.",
+            },
+            {
+                intent: "learn cnc",
+                targetCourseId: "course-cnc-fundamentals",
+                keywords: ["cnc", "gcode", "g-code", "automation", "coordinate", "machine"],
+                description:
+                    "Route learners asking about CNC machines, G-code programming, or Cartesian coordinates.",
+            },
+        ],
+        guard: {
+            requiredSkillIds: [],
+            minimumMastery: "novice",
+        },
+    }),
 };

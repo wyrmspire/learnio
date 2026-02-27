@@ -1,6 +1,7 @@
 import { LessonSpec } from "../contracts/lesson";
+import { cncCurriculum } from "./seed-cnc-curriculum";
 
-export const seedCurriculum: LessonSpec[] = [
+const baseCurriculum: LessonSpec[] = [
   {
     id: "lesson-ai-evals",
     schemaVersion: "1.0.0",
@@ -235,3 +236,5 @@ export const seedCurriculum: LessonSpec[] = [
     }
   }
 ];
+
+export const seedCurriculum: LessonSpec[] = [...baseCurriculum, ...cncCurriculum];

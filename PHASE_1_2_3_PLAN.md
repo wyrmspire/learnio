@@ -47,9 +47,9 @@
     *   Update `LearnSessionPage` to load the lesson from the URL params (`?lessonId=...`).
     *   Wire `LessonBlockRenderer` to dispatch commands that emit the new domain events.
 
-## Phase 3: Agent Retrieval + Future Abilities
+## Phase 3: Agent Retrieval, Genkit Orchestration, + Future Abilities
 
-**Goal:** Add an agent-friendly retrieval layer and "abilities" packaging.
+**Goal:** Add an agent-friendly retrieval layer, "abilities" packaging, and Genkit-powered generative pipelines.
 
 ## Requirements
 
@@ -60,9 +60,14 @@
     *   Implement `LocalIndexSearchProvider` that indexes **published LessonVersions** from the store.
     *   **Constraint:** Do not index the raw file system directly; index the artifacts in the DB.
 
-3.  **Agent Router:**
-    *   Implement a router that takes a user query + current progress and returns a recommended lesson/course.
+3.  **Genkit Orchestration:**
+    *   Configure `lib/data/genkit.ts` using `@genkit-ai/googleai`.
+    *   Migrate `StagedContentCompiler` to use Firebase Genkit flows for generation phases (brief, skeleton, blocks).
+    *   Use Genkit's telemetry / developer UI for debugging agent execution and prompt regressions.
 
-4.  **Interfaces:**
-    *   `SearchProvider`: For retrieval (Local now, Perplexity later).
-    *   `ResearchProvider`: For generation (already defined).
+4.  **Agent Router:**
+    *   Implement a router that takes a user query + current progress and returns a recommended lesson/course (orchestrated via Genkit actions).
+
+5.  **Interfaces:**
+    *   `SearchProvider`: For retrieval (Local now, Genkit action fetching Perplexity later).
+    *   `ResearchProvider`: For generation.

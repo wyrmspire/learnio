@@ -40,16 +40,18 @@ This roadmap outlines the evolution of LearnIO from a mock-first sandbox to a pr
 - The system "notices" when I struggle and offers a specific hint.
 - If I fail a concept, it schedules a review item for tomorrow.
 
-## Phase 3: Perplexity Integration
-**Goal:** Replace mock/LLM generation with grounded, cited research.
-- [ ] **ResearchProvider Interface:** Abstract the source of truth.
-- [ ] **Perplexity Adapter:** Implement the provider using Perplexity API.
+## Phase 3: AI Orchestration (Genkit + Real Models)
+**Goal:** Replace mock/LLM generation with grounded, cited research and functional Genkit orchestration.
+- [ ] **Genkit Pipeline Integration:** Rebuild the `StagedContentCompiler` using Firebase Genkit flows for observability and strict typing.
+- [ ] **ResearchProvider Interface:** Abstract the source of truth, implemented as a Genkit tool/action.
+- [ ] **Perplexity Adapter:** Implement the provider using Perplexity API (orchestrated via Genkit).
 - [ ] **Citation Pipeline:** Ensure every generated block carries source IDs from the research phase.
 - [ ] **Source Audit UI:** Allow users to click a citation and see the source context.
 
 **Definition of Done:**
-- Lessons generated include real-world, verifiable citations.
-- The "Research Brief" phase produces a high-quality, sourced outline.
+- Genkit successfully runs local or cloud-based UI for flow traces.
+- Lessons generated include real-world, verifiable citations via real LLM API calls.
+- The "Research Brief" phase produces a high-quality, sourced outline orchestrated entirely via a Genkit flow.
 
 ## Phase 4: Production Hardening
 **Goal:** Move from sandbox to scalable SaaS.

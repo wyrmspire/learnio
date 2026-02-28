@@ -169,9 +169,9 @@ export const MOCK_ABILITIES: Record<string, AbilityDefinition> = {
         skillId: "skill-cnc-machinist",
         name: "Job Shop CNC Machinist",
         description:
-            "Teaches learners manual machining foundations, precision grinding, heat treating, and introduction to CNC programming.",
+            "Teaches learners manual machining foundations, precision grinding, heat treating, engineering print reading, and introduction to CNC programming.",
         version: "1.0.0",
-        scopeTags: ["machining", "cnc", "manufacturing", "manual", "grinding", "heat-treat"],
+        scopeTags: ["machining", "cnc", "manufacturing", "manual", "grinding", "heat-treat", "print-reading", "blueprint"],
         branches: [
             {
                 intent: "learn manual machining",
@@ -179,6 +179,13 @@ export const MOCK_ABILITIES: Record<string, AbilityDefinition> = {
                 keywords: ["manual", "chip", "safety", "rpm", "feed", "grind", "heat", "treat", "tempering", "hardening"],
                 description:
                     "Route learners asking about manual machining basics, grinding, or heat treating.",
+            },
+            {
+                intent: "read prints",
+                targetCourseId: "course-cnc-fundamentals",
+                keywords: ["print", "blueprint", "drawing", "orthographic", "feature", "callout", "axis"],
+                description:
+                    "Route learners asking about reading engineering drawings, feature recognition, or axis detection on prints.",
             },
             {
                 intent: "learn cnc",

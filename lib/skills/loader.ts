@@ -35,12 +35,13 @@ const MOCK_SKILLS: Record<string, SkillManifest> = {
   "skill-cnc-machinist": {
     id: "skill-cnc-machinist",
     name: "Job Shop CNC Machinist",
-    description: "Master manual machining, precision grinding, and CNC programming for job shop manufacturing.",
+    description: "Master manual machining, precision grinding, CNC programming, and engineering print reading for job shop manufacturing.",
     version: "1.0.0",
-    tags: ["machining", "cnc", "manufacturing", "manual", "grinding"],
+    tags: ["machining", "cnc", "manufacturing", "manual", "grinding", "print-reading"],
     branches: [
       { intent: "learn manual machining", targetCourseId: "course-manual-machining" },
-      { intent: "learn cnc", targetCourseId: "course-cnc-fundamentals" }
+      { intent: "learn cnc", targetCourseId: "course-cnc-fundamentals" },
+      { intent: "read prints", targetCourseId: "course-cnc-fundamentals" }
     ]
   }
 };
@@ -64,8 +65,8 @@ const MOCK_COURSES: Record<string, CourseManifest> = {
     id: "course-cnc-fundamentals",
     skillId: "skill-cnc-machinist",
     title: "CNC Fundamentals",
-    description: "Transitioning to Computer Numerical Control and G-code basics.",
-    lessonOrder: ["lesson-cnc-intro"]
+    description: "Reading engineering prints, transitioning to Computer Numerical Control, and G-code basics.",
+    lessonOrder: ["lesson-print-reading", "lesson-cnc-intro"]
   }
 };
 

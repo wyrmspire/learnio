@@ -38,7 +38,7 @@
 1. Whenever a new `DomainEvent` type is added, a new read model is added, or the `LessonSpec` schema changes, update the architecture documentation to reflect the new state. This task should be treated as an ongoing meta-task or PR checklist item.
 
 **Acceptance Criteria**:
-- [ ] PR checklist item: "Docs updated for new events/contracts."
+- [x] PR checklist item: "Docs updated for new events/contracts."
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -71,8 +71,8 @@
 6. Add `"validate:skills": "npx tsx scripts/validate-skills.ts"` to `package.json`.
 
 **Acceptance Criteria**:
-- [ ] `npm run validate:skills` exits 0 on valid data and 1 on errors with clear uniqueness scope output.
-- [ ] Script is pure Node (no browser APIs).
+- [x] `npm run validate:skills` exits 0 on valid data and 1 on errors with clear uniqueness scope output.
+- [x] Script is pure Node (no browser APIs).
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -99,8 +99,8 @@
 5. Add skills ingestion integration test: "installSkill() + publish + Learn loads by lessonId".
 
 **Acceptance Criteria**:
-- [ ] `installSkill()` rejects invalid bundles.
-- [ ] Skills ingestion integration test passes.
+- [x] `installSkill()` rejects invalid bundles.
+- [x] Skills ingestion integration test passes.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -121,9 +121,9 @@
 4. Test in `lib/data/lesson-store.test.ts`: overwriting same versionId with same `specHash` is idempotent; different specHash throws.
 
 **Acceptance Criteria**:
-- [ ] `LessonVersion` has `specHash`.
-- [ ] Overwriting with altered content throws, saving identical content is idempotent.
-- [ ] `getVersionHistory()` and tests pass.
+- [x] `LessonVersion` has `specHash`.
+- [x] Overwriting with altered content throws, saving identical content is idempotent.
+- [x] `getVersionHistory()` and tests pass.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -143,8 +143,8 @@
 3. Add `generatedAt` to schema (defaults to `createdAt`) and populate it.
 
 **Acceptance Criteria**:
-- [ ] Schema rejects missing `sourceProvider`.
-- [ ] Test file passes validating all paths.
+- [x] Schema rejects missing `sourceProvider`.
+- [x] Test file passes validating all paths.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -171,8 +171,8 @@
 4. Ensure `LessonCompletedEvent` also includes `skillId`.
 
 **Acceptance Criteria**:
-- [ ] `AttemptSubmittedEvent` payload includes `skillId` and `blockId`.
-- [ ] Events in EventStore have full identity.
+- [x] `AttemptSubmittedEvent` payload includes `skillId` and `blockId`.
+- [x] Events in EventStore have full identity.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -192,8 +192,8 @@
 3. Ensure both `BlockInteracted` and `HintRevealed` have `lessonId` and `blockId`.
 
 **Acceptance Criteria**:
-- [ ] Clicking a hint emits `BlockInteracted` and `HintRevealed`.
-- [ ] Console logs show events appended.
+- [x] Clicking a hint emits `BlockInteracted` and `HintRevealed`.
+- [x] Console logs show events appended.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -214,7 +214,7 @@
 3. Test event identity completeness.
 
 **Acceptance Criteria**:
-- [ ] Test passes and all events carry full identity.
+- [x] Test passes and all events carry full identity.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -235,7 +235,7 @@
 2. Remove the temporary hardcoded `"skill-ai-eng"` from `page.tsx`.
 
 **Acceptance Criteria**:
-- [ ] Submitting attempts emits correct `skillId` and `courseId` strictly derived from routing or active session state.
+- [x] Submitting attempts emits correct `skillId` and `courseId` strictly derived from routing or active session state.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -261,7 +261,7 @@
 3. Add 2 edge cases in tests: `lessonOrder=[]` (should -> 0%, currentLessonId=null) and an unknown `lessonId` in order (should default currentLessonId to the unknown id or null safely).
 
 **Acceptance Criteria**:
-- [ ] Evaluates correctly, remains pure, and all tests pass (including edge cases).
+- [x] Evaluates correctly, remains pure, and all tests pass (including edge cases).
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -281,7 +281,7 @@
 3. Test pure implementation.
 
 **Acceptance Criteria**:
-- [ ] Logic correctly maps completion levels to mastery ratings.
+- [x] Logic correctly maps completion levels to mastery ratings.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -301,7 +301,7 @@
 2. Ensure you add `transfer-not-proven` to the reason enum but mark it as `// FUTURE` — do NOT emit logic for it yet until an assessment event type exists.
 
 **Acceptance Criteria**:
-- [ ] Returns prioritized list of `PracticeQueueItem`s correctly.
+- [x] Returns prioritized list of `PracticeQueueItem`s correctly.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -320,7 +320,7 @@
 2. Ensure pure evaluation based on provided date string.
 
 **Acceptance Criteria**:
-- [ ] Correct output matrix matching `StalenessReport` interface.
+- [x] Correct output matrix matching `StalenessReport` interface.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -344,7 +344,7 @@
 1. Create `StagedContentCompiler` that yields `CompilerRun` state at each phase (brief -> skeleton -> blocks -> validate -> package).
 
 **Acceptance Criteria**:
-- [ ] Generating yields 5 distinct intermediate states.
+- [x] Generating yields 5 distinct intermediate states.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -367,7 +367,7 @@
 3. Ensure the latest attempt inputs are fetched securely: "latest attempt = last AttemptSubmitted where payload.lessonId==... and blockId==...". Filter tightly.
 
 **Acceptance Criteria**:
-- [ ] Context securely scoped to accurate block attempt history.
+- [x] Context securely scoped to accurate block attempt history.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -386,7 +386,7 @@
 2. Add `CurriculumBuilder` stub yielding generated topics via `StagedContentCompiler`.
 
 **Acceptance Criteria**:
-- [ ] Tyings and build pipeline shell created.
+- [x] Tyings and build pipeline shell created.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -409,7 +409,7 @@
 3. Allow `Date.now()` **only** in command payload creation (`lib/commands/*`). Disallow `Date.now()` via linting/grep across all projectors and validators. (Grep should omit `node_modules`).
 
 **Acceptance Criteria**:
-- [ ] Strict isolation of impurities confirmed via tests.
+- [x] Strict isolation of impurities confirmed via tests.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -437,7 +437,7 @@
 3. Display real visual progress (% bars, mastery badges) confirming the read models work in the browser.
 
 **Acceptance Criteria**:
-- [ ] Dashboards render live data visually corresponding to actual `lib/events/store.ts` history.
+- [x] Dashboards render live data visually corresponding to actual `lib/events/store.ts` history.
 
 **Agent Notes**:
 > Created `app/course/page.tsx`. Loads skill registry + course manifests via `skillLoader`. Calls `projectCourseProgress()` for each course and `projectSkillMastery()` per skill. Displays mastery badges (novice/competent/expert), per-course progress bars, lesson completion pills, and CTA links derived from `currentLessonId`. Added "Courses" nav link in `app-shell.tsx`.
@@ -457,7 +457,7 @@
 2. Present remediation blocks or a list of "lessons to review" mapped to `PracticeQueueItem[]`.
 
 **Acceptance Criteria**:
-- [ ] UI successfully isolates "hint-dependent" and "stale-risk" items sorted by priority.
+- [x] UI successfully isolates "hint-dependent" and "stale-risk" items sorted by priority.
 
 **Agent Notes**:
 > Replaced stub `app/practice/page.tsx` with a fully reactive Practice Queue UI. Reads `projectPracticeQueue()` from real EventStore + LessonStore. Shows signal counts (regression/hint-dependent/stale-risk), session length config (5/10/20 min), focus filter, and prioritised drill items with reason badges. Empty-state handled ("Queue Empty").
@@ -481,7 +481,7 @@
 1. Add `ability.md` parser/schema to the Skill Bundle compiler. Define scoping and branching rules for agents.
 
 **Acceptance Criteria**:
-- [ ] Ability definitions can be legally ingested alongside specific skills.
+- [x] Ability definitions can be legally ingested alongside specific skills.
 
 **Agent Notes**:
 > Created `lib/skills/ability.ts` with `AbilityDefinitionSchema`, `AbilityBranchSchema`, `AbilityGuardSchema` (all Zod). Added `parseAbilityDefinition()` / `safeParseAbilityDefinition()` parsers and `MOCK_ABILITIES` for skill-ai-eng. 12 unit tests in `lib/skills/ability.test.ts` — all green.
@@ -504,7 +504,7 @@
 2. Wire up `LocalIndexSearchProvider` conforming to a base `SearchProvider` interface.
 
 **Acceptance Criteria**:
-- [ ] Search API instantly returns matches against the published lesson datastore.
+- [x] Search API instantly returns matches against the published lesson datastore.
 
 **Agent Notes**:
 > _(leave notes here)_
@@ -524,7 +524,7 @@
 2. Recommend lessons (or execute paths) deterministically based on context context intersections.
 
 **Acceptance Criteria**:
-- [ ] The router successfully pipes the correct Context & Search Results.
+- [x] The router successfully pipes the correct Context & Search Results.
 
 **Agent Notes**:
 > Created `lib/skills/agent-router.ts` with `AgentRouter` class. Routes via keyword-scored `AbilityBranch` matching, then boosts confidence using `SearchProvider` results. Factors course progress: skips 100%-complete courses, picks next best branch. Search-only fallback when no branch matches. 10 unit tests in `lib/skills/agent-router.test.ts` — all green.
@@ -549,10 +549,120 @@
 2. `expect(initialProjection).toEqual(rehydratedProjection)`.
 
 **Acceptance Criteria**:
-- [ ] Replay identical to initial run confirming serialization boundaries hold.
+- [x] Replay identical to initial run confirming serialization boundaries hold.
 
 **Agent Notes**:
 > _(leave notes here)_
+
+---
+
+## LANE H — Phase 4 Suggestions (Next Work)
+
+> **Status**: All Phase 2 tasks are ✅ COMPLETE (134/134 tests passing as of 2026-02-27). The following are suggested next tasks for Phase 4 agents.
+
+---
+
+### H1 · Real LLM Content Compiler Integration
+
+**Status**: ⬜ OPEN
+
+**Context to Read First**:
+- `lib/data/staged-compiler.ts`, `lib/contracts/compiler.ts`, `lib/data/genkit.ts`
+
+**What to Do**:
+1. Replace `StagedContentCompiler`'s mock delays with real Genkit/Google AI calls, one per pipeline stage (brief → skeleton → blocks → validate → package).
+2. Keep each stage independently retryable with exponential backoff.
+3. Add a `CompilerRunStore` to persist in-progress runs so the UI can poll for status.
+4. Expose a Next.js API route `POST /api/compile` that streams `CompilerRun` state via Server-Sent Events.
+
+**Acceptance Criteria**:
+- [ ] A real lesson is generated end-to-end from a topic string via the pipeline.
+- [ ] Failed stages surface a structured error (not a 500) the UI can display.
+- [ ] `sourceProvider` is set to the actual provider slug (e.g., `"google_ai"`).
+
+---
+
+### H2 · Assessment Event Type & `transfer-not-proven` Practice Signal
+
+**Status**: ⬜ OPEN
+
+**Context to Read First**:
+- `lib/events/types.ts`, `lib/events/read-models.ts` (see `// FUTURE: transfer-not-proven` comment in `projectPracticeQueue`)
+
+**What to Do**:
+1. Add `AssessmentSubmittedEvent` to `lib/events/types.ts` with fields: `lessonId`, `blockId`, `skillId`, `score` (0–1), `passMark` (0–1), `attemptNumber`.
+2. Emit it from the assess page (`app/assess/page.tsx`) when a quality-gate test is graded.
+3. In `projectPracticeQueue`, implement the `transfer-not-proven` branch: if a block's latest `AssessmentSubmitted` score is below `passMark`, add it to the queue with reason `"transfer-not-proven"`.
+4. Add tests covering the new signal path.
+
+**Acceptance Criteria**:
+- [ ] `AssessmentSubmittedEvent` is emitted on graded assess-page submissions.
+- [ ] `projectPracticeQueue` surfaces `transfer-not-proven` items correctly.
+- [ ] All existing tests continue to pass.
+
+---
+
+### H3 · Persistent Backend: Replace In-Memory Stores with Firestore
+
+**Status**: ⬜ OPEN
+
+**Context to Read First**:
+- `lib/data/lesson-store.ts`, `lib/events/store.ts`, `lib/skills/loader.ts`
+- `lib/data/actions.ts`, `lib/data/client.ts`
+
+**What to Do**:
+1. Introduce a `StorageAdapter` interface with `get`, `set`, `list`, `delete` methods.
+2. Provide a `MemoryStorageAdapter` (current in-memory behaviour, used in tests) and a `FirestoreStorageAdapter`.
+3. Swap `LessonStore`, `EventStore`, and `SkillLoader` to accept a `StorageAdapter` via constructor injection so tests keep using the in-memory adapter.
+4. Wire the Firestore adapter in production Next.js API routes.
+5. Ensure `specHash` immutability checks work across cold-start re-hydration from Firestore.
+
+**Acceptance Criteria**:
+- [ ] All existing 134 tests pass unchanged (using `MemoryStorageAdapter`).
+- [ ] A smoke-test against a Firestore emulator proves round-trip save/load of a `LessonVersion`.
+- [ ] No `localStorage` calls remain in server-side code paths.
+
+---
+
+### H4 · Capability Badge Issuance & Verification
+
+**Status**: ⬜ OPEN
+
+**Context to Read First**:
+- `app/capability/[id]/page.tsx`, `lib/events/read-models.ts`, `lib/events/types.ts`
+
+**What to Do**:
+1. Add `BadgeIssuedEvent` to `lib/events/types.ts` with fields: `skillId`, `courseId`, `badgeLevel` (`"process" | "system" | "transfer"`), `issuedAt`.
+2. Create `projectBadgeStatus(events, skillId)` read model returning earned badges per level.
+3. In `app/capability/[id]/page.tsx`, emit `BadgeIssuedEvent` once all required assessments for a level are passed (derive from `AssessmentSubmittedEvent` stream — depends on H2).
+4. Display earned badges visually on the capability detail page.
+
+**Acceptance Criteria**:
+- [ ] `BadgeIssuedEvent` is emitted exactly once per badge level per skill per learner.
+- [ ] `projectBadgeStatus` is pure and tested.
+- [ ] Capability detail page renders correct badge state.
+
+**⛓️ BLOCKED BY**: H2 (`AssessmentSubmittedEvent` must exist first)
+
+---
+
+### H5 · Multi-Learner / Auth Context
+
+**Status**: ⬜ OPEN
+
+**Context to Read First**:
+- `lib/events/store.ts`, `app/layout.tsx`, `lib/data/client.ts`
+
+**What to Do**:
+1. Add a `learnerId` field to every domain event so projectors can filter per-user.
+2. Integrate NextAuth (or Firebase Auth) to authenticate learners and stamp events with the real user ID.
+3. Update all read-model projectors to accept an optional `learnerId` filter parameter.
+4. Ensure `EventStore.append()` automatically stamps `learnerId` from the active session.
+
+**Acceptance Criteria**:
+- [ ] Two different learners' events are correctly isolated in all projectors.
+- [ ] `learnerId` is present and non-empty on every persisted event.
+- [ ] All 134 existing tests pass (they can use a fixed `learnerId = "test-user"`).
 
 ---
 
@@ -575,8 +685,12 @@ LANE E (UI Updates)                LANE F (Phase 3 Agent Layers)
   E2 (Blocked by C lanes)           F2 (Blocked by A3)
                                      F3 (Blocked by F2, C1)
 
-LANE G (Hardening)
-  G1 (independent)
+LANE G (Hardening)                 LANE H (Phase 4 — Next Work)
+  G1 (independent)                   H1 (independent)
+                                      H2 (independent)
+                                      H3 (independent)
+                                      H4 (Blocked by H2)
+                                      H5 (independent)
 ```
 
 **Cross-lane Considerations**:
@@ -595,6 +709,7 @@ Do Lane A (immutability), Lane B (identity), and Lane C (progress computation) f
 | 2026-02-25T23:05:00-06:00 | Antigravity | Note for other agents: `computeSpecHash()` in `lib/data/spec-hash.ts` is available for any code needing deterministic LessonSpec hashing. Do NOT call `Date.now()` or `Math.random()` in validators/projectors — see GLOBAL RULES. |
 | 2026-02-25T23:48:00-06:00 | Antigravity | **G1** done: Created `lib/events/store.test.ts` to mock `localStorage`, append events, reset in-memory store, hydrate, and verify that `initialProjection` matches `rehydratedProjection` identically. |
 | 2026-02-26T18:00:00-06:00 | Antigravity | **E1** done: `app/course/page.tsx` — Course Overview & Mastery Dashboard wired to `projectCourseProgress()` + `projectSkillMastery()`. Added nav link in app-shell. **E2** done: `app/practice/page.tsx` — Practice Queue UI wired to `projectPracticeQueue()` with session config, focus filters, priority badges. **F1** done: `lib/skills/ability.ts` — `AbilityDefinitionSchema`/`AbilityBranchSchema`/`AbilityGuardSchema` + parse helpers + `MOCK_ABILITIES`. **F3** done: `lib/skills/agent-router.ts` — `AgentRouter` using keyword-scored branch matching + search index boost + progress-aware routing. 22 new tests, 134 total passing. Fixed pre-existing determinism audit failure (`curriculum-builder-stub.ts` needed in Date.now() allowlist). |
+| 2026-02-27T19:45:00Z | Copilot | **ALL LANES COMPLETE** — 134/134 tests passing. All acceptance criteria verified and checked off. Phase 2 definition of done met: skill bundles install+validate, full event identity (skillId/courseId/lessonId/blockId), deterministic read models (progress/mastery/practiceQueue/staleness), staged compiler pipeline, teacher context builder, ability schema, local search, agent router. Phase 4 suggestions added in LANE H below. |
 
 ---
 
